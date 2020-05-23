@@ -211,7 +211,7 @@ async def check_message(ctx):
 # handles treason
 async def handle_treason(ctx):
 
-    penalty = 20
+    penalty = 30
 
     DB_CUR.execute('SELECT * FROM subjects WHERE id=?;', (str(ctx.author.id),))
     result = DB_CUR.fetchone()
@@ -229,14 +229,14 @@ async def handle_treason(ctx):
         DB_CUR.execute('UPDATE subjects SET name=?, points=?, offenses=? WHERE id=?', (str(ctx.author), points-penalty, offenses+1, str(ctx.author.id)))
 
         if (not result['block']):
-            await ctx.author.send("What the heck! My sources say you are disrespecting the rumpus room! STOP IT! IT'S A REALLY COOL ROOM!\nYou lose %d doubloons! You now have %d doubloons!" % (penalty, points-penalty))
+            await ctx.author.send("What the heck! My sources say you are disrespecting the rumpus room! STOP IT! IT'S A REALLY COOL ROOM!\nI'm taking %d doubloons for your disrespect! You now have %d doubloons!" % (penalty, points-penalty))
 
     DB_CONN.commit()
 
 # handles good messages
 async def handle_good(ctx):
 
-    benefit = 20
+    benefit = 45
 
     DB_CUR.execute('SELECT * FROM subjects WHERE id=?;', (str(ctx.author.id),))
     result = DB_CUR.fetchone()
@@ -254,7 +254,7 @@ async def handle_good(ctx):
         DB_CUR.execute('UPDATE subjects SET name=?, points=?, deeds=? WHERE id=?', (str(ctx.author), points+benefit, deeds+1, str(ctx.author.id)))
 
         if (not result['block']):
-            await ctx.author.send("Thank you for respecting the rumpus room! You really are a fantastic person!\nYou gain %d doubloons! You now have %d doubloons!" % (benefit, points+benefit))
+            await ctx.author.send("Thank you for respecting the rumpus room! You really are a fantastic person!\nI'm giving you %d doubloons for your good behaviour! You now have %d doubloons!" % (benefit, points+benefit))
 
     DB_CONN.commit()
 
