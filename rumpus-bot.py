@@ -219,8 +219,7 @@ async def handle_treason(ctx):
     if (not result):
         DB_CUR.execute('INSERT INTO subjects VALUES (?, ?, 0, 1, 0, 0);', (str(ctx.author.id), str(ctx.author)))
         
-        await ctx.author.send("HALT! I've caught wind that you've been speaking ill of the beloved rumpus room!\nYou will not be punished this time, but next time watch your tounge!")
-        await ctx.author.send("*Note, if you would like to stop recieving these messages, type `$rumpus block`. Similarly, `$rumpus unblock` will allow these messages.\nYou can also type `$rumpus results` to see the current standings.*")
+        await ctx.author.send("HALT! I've caught wind that you've been speaking ill of the beloved rumpus room!\nYou will not be punished this time, but next time watch your tounge!\n*Note, if you would like to stop recieving these messages, type `$rumpus block`. Similarly, `$rumpus unblock` will allow these messages.\nYou can also type `$rumpus results` to see the current standings.*")
 
     else:
         points = result['points']
@@ -244,8 +243,7 @@ async def handle_good(ctx):
     if (not result):
         DB_CUR.execute('INSERT INTO subjects VALUES (?, ?, 0, 0, 1, ?);', (str(ctx.author.id), str(ctx.author), benefit))
         
-        await ctx.author.send("Well done! My sources say you have been respecting the rumpus room! I'll give you %d doubloons for your good deed!" % (benefit))
-        await ctx.author.send("*Note, if you would like to stop recieving these messages, type `$rumpus block`. Similarly, `$rumpus unblock` will allow these messages.\nYou can also type `$rumpus results` to see the current standings.*")
+        await ctx.author.send("Well done! My sources say you have been respecting the rumpus room! I'll give you %d doubloons for your good deed!\n*Note, if you would like to stop recieving these messages, type `$rumpus block`. Similarly, `$rumpus unblock` will allow these messages.\nYou can also type `$rumpus results` to see the current standings.*" % (benefit))
 
     else:
         points = result['points']
