@@ -13,9 +13,7 @@ create table subjects (
   primary key (id)
 );
 
--- members
--- |email|name|phone|pwd|
 --insert into subjects values
---		('1234', 'Articuler', 0, 10, 69);
+--		('1234', 'Articuler', 0, 10, 0, 0, 0);
 
 	
