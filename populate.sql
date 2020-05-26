@@ -4,9 +4,9 @@ drop table if exists subjects;
 PRAGMA foreign_keys = ON;
 
 create table subjects (
-  id		    text,
-  name		  text,
-  block		  int,
+  id	    text,
+  name	    text,
+  block     int,
   offenses  int,
   deeds     int,
   points    int,
