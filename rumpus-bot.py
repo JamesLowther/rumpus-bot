@@ -5,7 +5,7 @@ from discord.ext import commands
 import json
 import os, sys, re, sqlite3
 
-CONFIG_FILE = os.path.dirname(__file__) + '/config.json'
+CONFIG_FILE = os.path.dirname(os.path.realpath(__file__)) + '/config.json'
 
 # Set from json
 BOT_TOKEN = None
@@ -60,6 +60,28 @@ async def shutdown(ctx):
         await ctx.channel.send("The rumpus room remains unguarded. Tread carefully.")
         print("Shutting down bot")
         await bot.logout()
+
+    else:
+        await ctx.channel.send("Sorry! You don't have permission to do that!")
+
+# reloads the bot
+@bot.command(name="reload")
+async def reload_bot(ctx):
+
+    global TREASON_WORDS, GOOD_WORDS, ROOT_IDS
+    
+    if (ctx.author.id in ROOT_IDS):
+        with open(CONFIG_FILE) as f:
+            
+            data = json.load(f)
+
+            ROOT_IDS = data['root_ids']
+            TREASON_WORDS = data['treasonous_words']
+            GOOD_WORDS = data['good_words']
+
+            f.close()
+
+        await ctx.channel.send("Rumpus reload successful!")
 
     else:
         await ctx.channel.send("Sorry! You don't have permission to do that!")
@@ -186,7 +208,7 @@ def read_json():
         ROOT_IDS = data['root_ids']
         TREASON_WORDS = data['treasonous_words']
         GOOD_WORDS = data['good_words']
-        DB_PATH = os.path.dirname(__file__) + '/' + data['db_name']
+        DB_PATH = os.path.dirname(os.path.realpath(__file__)) + '/' + data['db_name']
 
         f.close()
 
