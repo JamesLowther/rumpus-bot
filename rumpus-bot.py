@@ -112,12 +112,15 @@ async def results(ctx):
 
         for row in results:
 
+            user = await bot.fetch_user(row['id'])
+            user_full = user.name + '#' + user.discriminator
+
             to_send += str(count).ljust(index_length) + "| "
 
-            if (len(row['name']) > name_length):
-                to_send += row['name'][:name_length-1] + " "
+            if (len(user_full) > name_length):
+                to_send += user_full[:name_length-1] + " "
             else:
-                to_send += row['name'].ljust(name_length)
+                to_send += user_full.ljust(name_length)
 
             to_send += "| " + str(row['points']).ljust(point_length)
             to_send += "| " + str(row['offenses']).ljust(offense_length)
@@ -134,14 +137,17 @@ async def results(ctx):
 
             i = results.index(row) + 1
 
+            user = await bot.fetch_user(row['id'])
+            user_full = user.name + '#' + user.discriminator
+
             to_send += "-"*len(header) + "\n"
             
             to_send += str(i).ljust(index_length) + "| "
 
-            if (len(row['name']) > name_length):
-                to_send += row['name'][:name_length-1] + " "
+            if (len(user_full) > name_length):
+                to_send += user_full[:name_length-1] + " "
             else:
-                to_send += row['name'].ljust(name_length)
+                to_send += user_full.ljust(name_length)
 
             to_send += "| " + str(row['points']).ljust(point_length)
             to_send += "| " + str(row['offenses']).ljust(offense_length)
@@ -159,7 +165,7 @@ async def block(ctx):
     result = DB_CUR.fetchone()
 
     if (result):
-        DB_CUR.execute('UPDATE subjects SET name=?, block=1 WHERE id=?', (str(ctx.author), str(ctx.author.id),))
+        DB_CUR.execute('UPDATE subjects SET block=1 WHERE id=?', (str(ctx.author.id),))
     
     else:
         DB_CUR.execute('INSERT INTO subjects VALUES (?, ?, 1, 0, 0, 0);', (str(ctx.author.id), str(ctx.author)))
@@ -175,7 +181,7 @@ async def unblock(ctx):
     result = DB_CUR.fetchone()
 
     if (result):
-        DB_CUR.execute('UPDATE subjects SET name=?, block=0 WHERE id=?', (str(ctx.author), str(ctx.author.id),))
+        DB_CUR.execute('UPDATE subjects SET block=0 WHERE id=?', (str(ctx.author.id),))
     
     else:
         DB_CUR.execute('INSERT INTO subjects VALUES (?, ?, 0, 0, 0, 0);', (str(ctx.author.id), str(ctx.author)))
@@ -247,7 +253,7 @@ async def handle_treason(ctx):
         points = result['points']
         offenses = result['offenses']
 
-        DB_CUR.execute('UPDATE subjects SET name=?, points=?, offenses=? WHERE id=?', (str(ctx.author), points-penalty, offenses+1, str(ctx.author.id)))
+        DB_CUR.execute('UPDATE subjects SET points=?, offenses=? WHERE id=?', (points-penalty, offenses+1, str(ctx.author.id)))
 
         if (not result['block']):
             await ctx.author.send("What the heck! My sources say you are disrespecting the rumpus room! STOP IT! IT'S A REALLY COOL ROOM!\nI'm taking %d doubloons for your disrespect! You now have %d doubloons!" % (penalty, points-penalty))
@@ -271,7 +277,7 @@ async def handle_good(ctx):
         points = result['points']
         deeds = result['deeds']
 
-        DB_CUR.execute('UPDATE subjects SET name=?, points=?, deeds=? WHERE id=?', (str(ctx.author), points+benefit, deeds+1, str(ctx.author.id)))
+        DB_CUR.execute('UPDATE subjects SET points=?, deeds=? WHERE id=?', (points+benefit, deeds+1, str(ctx.author.id)))
 
         if (not result['block']):
             await ctx.author.send("Thank you for respecting the rumpus room! You really are a fantastic person!\nI'm giving you %d doubloons for your good behaviour! You now have %d doubloons!" % (benefit, points+benefit))

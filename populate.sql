@@ -5,7 +5,6 @@ PRAGMA foreign_keys = ON;
 
 create table subjects (
   id	    text,
-  name	    text,
   block     int,
   offenses  int,
   deeds     int,
